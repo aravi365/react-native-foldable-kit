@@ -13,7 +13,9 @@
 
 ![The demo app on the iPhone Duo simulator (iOS 27.1): closed, fully open, book and tabletop](https://raw.githubusercontent.com/aravi365/react-native-foldable-kit/main/docs/screenshots/ios-hero.png)
 
-The [demo app](./example/App.tsx) on the **iPhone Duo simulator (iOS 27.1)**. The panel shows what the hooks report live; `FoldableSplit` moves the panes around the fold. Full-size shots: [docs/SCREENSHOTS.md](./docs/SCREENSHOTS.md) · [layout diagram](./docs/layouts.png).
+![The demo app on the Pixel 9 Pro Fold emulator (Android 16): closed, fully open, book and tabletop](https://raw.githubusercontent.com/aravi365/react-native-foldable-kit/main/docs/screenshots/android-hero.png)
+
+The same [demo app](./example/App.tsx) on the **iPhone Duo simulator (iOS 27.1)** and the **Pixel 9 Pro Fold emulator (Android 16)**. The panel shows what the hooks report live; `FoldableSplit` moves the panes around the fold. Full-size shots: [docs/SCREENSHOTS.md](./docs/SCREENSHOTS.md) · [layout diagram](./docs/layouts.png).
 
 Run the demo yourself:
 
