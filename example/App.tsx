@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { FlatList, Pressable, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import {
+  FoldableRoot,
   FoldableSplit,
   useFoldRegion,
   useHinge,
@@ -17,6 +18,9 @@ const ITEMS = Array.from({ length: 24 }, (_, i) => ({
   title: `Message ${i + 1}`,
   body: 'Open this on a foldable: the list and the detail move to either side of the fold.',
 }));
+
+type Mode = 'split' | 'root';
+const ModeContext = createContext<{ mode: Mode; toggle: () => void }>({ mode: 'split', toggle: () => {} });
 
 const POSTURE_COLOR: Record<string, string> = {
   book: '#7c3aed',
@@ -46,11 +50,17 @@ function StatePanel() {
   const occlusions = useOcclusions();
   const foldable = useIsFoldable();
   const f = fold?.frame;
+  const { mode, toggle } = useContext(ModeContext);
 
   return (
     <View style={styles.panel}>
-      <View style={[styles.badge, { backgroundColor: POSTURE_COLOR[posture] }]}>
-        <Text style={styles.badgeText}>{posture.toUpperCase()}</Text>
+      <View style={styles.header}>
+        <View style={[styles.badge, { backgroundColor: POSTURE_COLOR[posture] }]}>
+          <Text style={styles.badgeText}>{posture.toUpperCase()}</Text>
+        </View>
+        <Pressable onPress={toggle} style={styles.mode}>
+          <Text style={styles.modeText}>{mode === 'split' ? 'FoldableSplit' : 'FoldableRoot'} ⇄</Text>
+        </Pressable>
       </View>
       <Row label="Foldable" value={foldable ? 'yes' : 'no'} />
       <Row label="Hinge" value={`${hinge.status}${hinge.angle == null ? '' : ` · ${Math.round(hinge.angle)}°`}`} />
@@ -96,19 +106,36 @@ function Detail({ id }: { id: string }) {
   );
 }
 
+function OtherSide() {
+  return (
+    <View style={styles.other}>
+      <Text style={styles.otherTitle}>Other side of the fold</Text>
+      <Text style={styles.otherBody}>
+        FoldableRoot keeps the whole app on one side while the device is half open. This pane is optional.
+      </Text>
+    </View>
+  );
+}
+
 export default function App() {
   const [selected, setSelected] = useState('1');
+  const [mode, setMode] = useState<Mode>('split');
+  const screen = (
+    <FoldableSplit
+      ratio={0.42}
+      compact="stack"
+      primary={<List selected={selected} onSelect={setSelected} />}
+      secondary={<Detail id={selected} />}
+    />
+  );
   return (
     <SafeAreaProvider>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={styles.root} edges={['top', 'bottom', 'left', 'right']}>
-        <FoldableSplit
-          ratio={0.42}
-          compact="stack"
-          primary={<List selected={selected} onSelect={setSelected} />}
-          secondary={<Detail id={selected} />}
-        />
-      </SafeAreaView>
+      <ModeContext.Provider value={{ mode, toggle: () => setMode((m) => (m === 'split' ? 'root' : 'split')) }}>
+        <SafeAreaView style={styles.root} edges={['top', 'bottom', 'left', 'right']}>
+          {mode === 'split' ? screen : <FoldableRoot other={<OtherSide />}>{screen}</FoldableRoot>}
+        </SafeAreaView>
+      </ModeContext.Provider>
     </SafeAreaProvider>
   );
 }
@@ -116,7 +143,13 @@ export default function App() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: '#f8fafc' },
   panel: { margin: 12, padding: 12, borderRadius: 14, backgroundColor: '#fff', gap: 6 },
-  badge: { alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 999, marginBottom: 4 },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 },
+  mode: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 999, backgroundColor: '#e2e8f0' },
+  modeText: { color: '#0f172a', fontWeight: '600', fontSize: 12 },
+  other: { flex: 1, margin: 12, padding: 20, borderRadius: 14, backgroundColor: '#ecfeff', justifyContent: 'center' },
+  otherTitle: { fontSize: 18, fontWeight: '700', color: '#155e75' },
+  otherBody: { marginTop: 6, fontSize: 14, lineHeight: 20, color: '#0e7490' },
+  badge: { alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 999 },
   badgeText: { color: '#fff', fontWeight: '700', letterSpacing: 1 },
   row: { flexDirection: 'row', justifyContent: 'space-between', gap: 12 },
   label: { color: '#64748b' },

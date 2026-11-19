@@ -169,3 +169,30 @@ export function computeSplit(container: Rect, fold: FoldRegion | null, o: SplitO
   }
   return { mode: 'compact' };
 }
+
+export type RootLayout =
+  | { avoid: false }
+  | { avoid: true; direction: 'row' | 'column'; reverse: boolean; size: number; gap: number };
+
+/** Which side of a fold to keep the whole app on, when the fold crosses the root. */
+export function computeRootLayout(
+  container: Rect,
+  fold: FoldRegion | null,
+  side: 'start' | 'end' | 'larger'
+): RootLayout {
+  if (!fold || container.width <= 0 || container.height <= 0) return { avoid: false };
+  const vertical = fold.orientation === 'vertical';
+  const total = vertical ? container.width : container.height;
+  const start = vertical ? fold.frame.x - container.x : fold.frame.y - container.y;
+  const gap = vertical ? fold.frame.width : fold.frame.height;
+  const end = total - start - gap;
+  if (start <= 0 || end <= 0) return { avoid: false };
+  const useEnd = side === 'end' || (side === 'larger' && end > start);
+  return {
+    avoid: true,
+    direction: vertical ? 'row' : 'column',
+    reverse: useEnd,
+    size: useEnd ? end : start,
+    gap,
+  };
+}

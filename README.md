@@ -1,5 +1,7 @@
 # react-native-foldable-kit
 
+![react-native-foldable-kit: make your React Native app iPhone Duo and Android foldable ready](https://raw.githubusercontent.com/aravi365/react-native-foldable-kit/main/docs/cover.png)
+
 **Make your React Native app iPhone Duo and Android foldable ready.** Fold posture, hinge, fold and camera regions, size classes, the iPhone Duo vertical bar edge and a fold-aware split view, behind one tiny API.
 
 - One API for **iPhone Duo** (iOS 27.1 `UIHingeInteraction`, `reservedRegions`, `verticalBarEdge`) and **Android foldables** (Jetpack WindowManager `FoldingFeature`, hinge angle sensor, display cutouts): Galaxy Z Fold / Flip, Pixel Fold, OnePlus Open, Surface Duo and others.
@@ -60,6 +62,30 @@ export function Mail() {
 
 `FoldableSplit` puts the panes on either side of the fold when the device is half open (book → left/right, tabletop → top/bottom), side by side on wide windows (iPhone Duo inner display, an unfolded Android phone, tablets), and stacked or single on narrow ones.
 
+## Make an existing app fold-safe in one line
+
+```tsx
+import { FoldableRoot } from 'react-native-foldable-kit';
+
+export default function App() {
+  return (
+    <FoldableRoot>
+      <YourApp />
+    </FoldableRoot>
+  );
+}
+```
+
+While the device is half open (book or tabletop), `FoldableRoot` keeps your **whole app on one side of the fold**, so nothing sits on the crease. Your screens don't change and stay mounted, so state, navigation and scroll positions survive opening and closing. Fully open, closed and non-foldable devices render your app full screen as usual.
+
+| Prop | Default | |
+|---|---|---|
+| `avoidFold` | `true` | Turn fold avoidance off without removing the wrapper. |
+| `side` | `'larger'` | `'start'` (left/top), `'end'` (right/bottom) or the larger half. |
+| `other` | none | Something for the other half: a hint, media controls, a second view. |
+
+Inside `FoldableRoot`, `useSizeClass()`, `useIsWide()` and `useAvailableSize()` report the **pane** the app is in, not the whole window, so responsive screens lay out for the space they actually have. Use `FoldableSplit` in screens that should use both halves.
+
 ## Hooks
 
 | Hook | Returns | Use it for |
@@ -72,6 +98,7 @@ export function Mail() {
 | `useVerticalBarEdge()` | `'left' \| 'right' \| null` | Putting your own rail on the same side as the iPhone Duo system bar. |
 | `useHinge({ angle? })` | `{ status, angle }` | Effects driven by the hinge. Pass `{ angle: true }` for live degrees (0 closed, 180 flat). |
 | `useIsFoldable()` | `boolean` | Showing foldable-only features. |
+| `useAvailableSize()` | `{ width, height }` | Size to lay out in: the `FoldableRoot` pane while avoiding the fold, else the window. |
 | `useFoldable()` | full `FoldableState` | Everything at once (re-renders on any change). |
 
 Outside React: `getFoldableState()` and `addFoldableListener(fn)`.

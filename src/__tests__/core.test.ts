@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { computeSplit, DEFAULT_STATE, normalize, sizeClassFromWindow } from '../core.ts';
+import { computeRootLayout, computeSplit, DEFAULT_STATE, normalize, sizeClassFromWindow } from '../core.ts';
 
 const base = {
   isSupported: true,
@@ -110,4 +110,15 @@ test('size class from window', () => {
   assert.deepEqual(sizeClassFromWindow(390, 844), { horizontal: 'compact', vertical: 'regular' });
   assert.deepEqual(sizeClassFromWindow(700, 900), { horizontal: 'regular', vertical: 'regular' });
   assert.deepEqual(sizeClassFromWindow(844, 390), { horizontal: 'regular', vertical: 'compact' });
+});
+
+test('root keeps app on one side of the fold', () => {
+  const book = normalize({ ...base, hingeStatus: 'partiallyOpen', regions: [vFold] });
+  const box = { x: 0, y: 0, width: 700, height: 800 };
+  assert.deepEqual(computeRootLayout(box, book.fold, 'start'), { avoid: true, direction: 'row', reverse: false, size: 340, gap: 20 });
+  assert.deepEqual(computeRootLayout(box, book.fold, 'end'), { avoid: true, direction: 'row', reverse: true, size: 340, gap: 20 });
+  const table = normalize({ ...base, hingeStatus: 'partiallyOpen', regions: [hFold] });
+  assert.deepEqual(computeRootLayout({ x: 0, y: 0, width: 700, height: 900 }, table.fold, 'larger'), { avoid: true, direction: 'column', reverse: true, size: 500, gap: 0 });
+  assert.deepEqual(computeRootLayout(box, null, 'larger'), { avoid: false });
+  assert.deepEqual(computeRootLayout({ x: 400, y: 0, width: 300, height: 800 }, book.fold, 'larger'), { avoid: false });
 });
