@@ -1,0 +1,13 @@
+react-native-foldable-kit includes code adapted from the following MIT-licensed projects:
+
+- react-native-iphone-duo, Copyright (c) 2026 Rui Rigueira
+  iOS root-view observation, region tracker view, hinge/trait observation and teardown
+  (ios/FoldableKit.mm).
+
+- react-native-reserved-regions, Copyright (c) 2026 Janic Duplessis
+  Android fold/cutout region model (android/.../FoldableKitModule.kt).
+
+- expo-hinge, Copyright (c) 2015-present 650 Industries, Inc. (aka Expo)
+  Android hinge status mapping from FoldingFeature and TYPE_HINGE_ANGLE.
+
+Each is used under the MIT License, the full text of which appears in LICENSE.

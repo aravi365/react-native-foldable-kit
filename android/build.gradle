@@ -1,0 +1,47 @@
+buildscript {
+  ext.FoldableKit = [
+    kotlinVersion: "2.1.20",
+    minSdkVersion: 24,
+    compileSdkVersion: 36
+  ]
+  ext.foldableKitExt = { prop ->
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : FoldableKit[prop]
+  }
+  repositories {
+    google()
+    mavenCentral()
+  }
+  dependencies {
+    classpath "com.android.tools.build:gradle:8.7.2"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${foldableKitExt('kotlinVersion')}"
+  }
+}
+
+apply plugin: "com.android.library"
+if (project.extensions.findByName("kotlin") == null) {
+  apply plugin: "kotlin-android"
+}
+apply plugin: "com.facebook.react"
+
+android {
+  namespace "com.foldablekit"
+  compileSdkVersion foldableKitExt("compileSdkVersion")
+  defaultConfig {
+    minSdkVersion foldableKitExt("minSdkVersion")
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
+  }
+}
+
+repositories {
+  google()
+  mavenCentral()
+}
+
+dependencies {
+  implementation "com.facebook.react:react-android"
+  implementation "androidx.window:window:1.5.1"
+  implementation "androidx.window:window-java:1.5.1"
+}

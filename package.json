@@ -1,0 +1,90 @@
+{
+  "name": "react-native-foldable-kit",
+  "version": "0.1.0",
+  "description": "Make React Native apps iPhone Duo and Android foldable ready: fold & hinge posture, reserved regions (fold, cameras), size classes, vertical bar edge and a fold-aware split view. Tiny, zero dependencies, New Architecture.",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "react-native": "./src/index.ts",
+  "source": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "react-native": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./jest": {
+      "types": "./jest/index.d.ts",
+      "default": "./jest/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "lib",
+    "ios",
+    "android/build.gradle",
+    "android/src",
+    "jest",
+    "*.podspec",
+    "!**/__tests__",
+    "NOTICE"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "rm -rf lib && tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test --experimental-strip-types src/__tests__/*.test.ts",
+    "prepack": "npm run build"
+  },
+  "keywords": [
+    "react-native",
+    "iphone-duo",
+    "iphone duo",
+    "foldable",
+    "foldable-iphone",
+    "android-foldable",
+    "galaxy-z-fold",
+    "pixel-fold",
+    "hinge",
+    "posture",
+    "tabletop",
+    "dual-screen",
+    "reserved-regions",
+    "jetpack-window-manager",
+    "size-class",
+    "split-view",
+    "turbo-module",
+    "new-architecture"
+  ],
+  "license": "MIT",
+  "author": "Aravi (https://github.com/aravi365)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aravi365/react-native-foldable-kit.git"
+  },
+  "homepage": "https://github.com/aravi365/react-native-foldable-kit#readme",
+  "bugs": "https://github.com/aravi365/react-native-foldable-kit/issues",
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-native": ">=0.79.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "react": "19.3.1",
+    "react-native": "0.88.1",
+    "typescript": "^5.9.0"
+  },
+  "codegenConfig": {
+    "name": "FoldableKitSpec",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "com.foldablekit"
+    },
+    "ios": {
+      "modulesProvider": {
+        "FoldableKit": "FoldableKit"
+      }
+    }
+  }
+}
