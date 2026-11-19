@@ -48,5 +48,5 @@ done
       if [ -f "$OUT/$P-$POSTURE.png" ]; then echo "<img src=\"screenshots/$P-$POSTURE.png\" width=\"360\" alt=\"$P $POSTURE\" /> "; fi
     done
   done
-} > "$ROOT/docs/SCREENSHOTS.md"
-echo "Done. Wrote docs/SCREENSHOTS.md. Commit docs/ to publish them."
+} > "$ROOT/docs/SCREENSHOTS.generated.md"
+echo "Done. Wrote docs/SCREENSHOTS.generated.md. Frame with scripts/frame-screenshots.py. Commit docs/ to publish them."

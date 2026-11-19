@@ -46,6 +46,11 @@ test('android closed via angle', () => {
   assert.equal(normalize({ ...base, isFoldable: false, hingeAngle: 3 }).posture, 'unknown');
 });
 
+test('nearly flat without a separating fold reads flat', () => {
+  assert.equal(normalize({ ...base, hingeStatus: 'partiallyOpen', hingeAngle: 172 }).posture, 'flat');
+  assert.equal(normalize({ ...base, hingeStatus: 'partiallyOpen', hingeAngle: 120 }).posture, 'unknown');
+});
+
 test('angle -1 means unknown', () => {
   assert.equal(normalize({ ...base, hingeAngle: -1 }).hinge.angle, null);
 });

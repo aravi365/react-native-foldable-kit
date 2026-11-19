@@ -38,8 +38,8 @@ export function derivePosture(
 ): Posture {
   switch (hinge.status) {
     case 'partiallyOpen':
-      if (!fold) return 'unknown';
-      return fold.orientation === 'vertical' ? 'book' : 'tabletop';
+      if (fold) return fold.orientation === 'vertical' ? 'book' : 'tabletop';
+      break;
     case 'fullyOpen':
       return 'flat';
     case 'closed':
