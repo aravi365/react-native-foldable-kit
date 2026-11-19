@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <rect width="1320" height="600" rx="24" fill="#f8fafc"/>
+  <text x="40" y="52" font-size="24" font-weight="700" fill="#0f172a">How &lt;FoldableSplit&gt; lays out in each posture</text>
+  <text x="40" y="80" font-size="15" fill="#64748b">Illustration, not a device capture. Real screenshots: docs/SCREENSHOTS.md</text>
+
+  <defs>
+    <g id="rows">
+      <rect x="0" y="0" width="100%" height="10" rx="5" fill="#e2e8f0"/>
+    </g>
+  </defs>
+
+  <!-- 1. Closed: outer display, compact -> stacked -->
+  <g transform="translate(70,120)">
+    <rect x="0" y="0" width="170" height="330" rx="26" fill="#0f172a"/>
+    <rect x="8" y="8" width="154" height="314" rx="20" fill="#ffffff"/>
+    <rect x="22" y="22" width="64" height="18" rx="9" fill="#ea580c"/>
+    <text x="54" y="35" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">CLOSED</text>
+    <rect x="22" y="52" width="126" height="120" rx="10" fill="#ede9fe"/>
+    <text x="85" y="72" font-size="12" font-weight="600" fill="#4c1d95" text-anchor="middle">primary</text>
+    <rect x="34" y="84" width="102" height="10" rx="5" fill="#c4b5fd"/>
+    <rect x="34" y="102" width="86" height="10" rx="5" fill="#c4b5fd"/>
+    <rect x="34" y="120" width="96" height="10" rx="5" fill="#c4b5fd"/>
+    <rect x="34" y="138" width="70" height="10" rx="5" fill="#c4b5fd"/>
+    <rect x="22" y="182" width="126" height="126" rx="10" fill="#e0f2fe"/>
+    <text x="85" y="202" font-size="12" font-weight="600" fill="#075985" text-anchor="middle">secondary</text>
+    <rect x="34" y="214" width="102" height="10" rx="5" fill="#7dd3fc"/>
+    <rect x="34" y="232" width="80" height="10" rx="5" fill="#7dd3fc"/>
+    <text x="85" y="380" font-size="16" font-weight="700" fill="#0f172a" text-anchor="middle">Closed</text>
+    <text x="85" y="402" font-size="13" fill="#64748b" text-anchor="middle">compact width</text>
+    <text x="85" y="420" font-size="13" fill="#64748b" text-anchor="middle">stacked (compact="stack")</text>
+  </g>
+
+  <!-- 2. Flat: inner display, regular -> side by side by ratio -->
+  <g transform="translate(320,120)">
+    <rect x="0" y="0" width="300" height="330" rx="26" fill="#0f172a"/>
+    <rect x="8" y="8" width="284" height="314" rx="20" fill="#ffffff"/>
+    <line x1="150" y1="8" x2="150" y2="322" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3 5"/>
+    <rect x="22" y="22" width="52" height="18" rx="9" fill="#16a34a"/>
+    <text x="48" y="35" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">FLAT</text>
+    <rect x="22" y="52" width="104" height="256" rx="10" fill="#ede9fe"/>
+    <text x="74" y="72" font-size="12" font-weight="600" fill="#4c1d95" text-anchor="middle">primary</text>
+    <rect x="32" y="84" width="84" height="10" rx="5" fill="#c4b5fd"/>
+    <rect x="32" y="102" width="70" height="10" rx="5" fill="#c4b5fd"/>
+    <rect x="32" y="120" width="78" height="10" rx="5" fill="#c4b5fd"/>
+    <rect x="32" y="138" width="60" height="10" rx="5" fill="#c4b5fd"/>
+    <rect x="136" y="52" width="142" height="256" rx="10" fill="#e0f2fe"/>
+    <text x="207" y="72" font-size="12" font-weight="600" fill="#075985" text-anchor="middle">secondary</text>
+    <rect x="148" y="84" width="118" height="10" rx="5" fill="#7dd3fc"/>
+    <rect x="148" y="102" width="96" height="10" rx="5" fill="#7dd3fc"/>
+    <rect x="148" y="120" width="108" height="10" rx="5" fill="#7dd3fc"/>
+    <text x="150" y="380" font-size="16" font-weight="700" fill="#0f172a" text-anchor="middle">Fully open</text>
+    <text x="150" y="402" font-size="13" fill="#64748b" text-anchor="middle">regular width, fold not separating</text>
+    <text x="150" y="420" font-size="13" fill="#64748b" text-anchor="middle">side by side at ratio (0.42)</text>
+  </g>
+
+  <!-- 3. Book: half open, vertical fold -> split at the fold -->
+  <g transform="translate(680,120)">
+    <rect x="0" y="0" width="300" height="330" rx="26" fill="#0f172a"/>
+    <rect x="8" y="8" width="284" height="314" rx="20" fill="#ffffff"/>
+    <rect x="144" y="8" width="12" height="314" fill="#fde68a"/>
+    <line x1="150" y1="8" x2="150" y2="322" stroke="#d97706" stroke-width="2" stroke-dasharray="6 4"/>
+    <rect x="22" y="22" width="56" height="18" rx="9" fill="#7c3aed"/>
+    <text x="50" y="35" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">BOOK</text>
+    <rect x="22" y="52" width="114" height="256" rx="10" fill="#ede9fe"/>
+    <text x="79" y="72" font-size="12" font-weight="600" fill="#4c1d95" text-anchor="middle">primary</text>
+    <rect x="32" y="84" width="94" height="10" rx="5" fill="#c4b5fd"/>
+    <rect x="32" y="102" width="76" height="10" rx="5" fill="#c4b5fd"/>
+    <rect x="32" y="120" width="86" height="10" rx="5" fill="#c4b5fd"/>
+    <rect x="164" y="52" width="114" height="256" rx="10" fill="#e0f2fe"/>
+    <text x="221" y="72" font-size="12" font-weight="600" fill="#075985" text-anchor="middle">secondary</text>
+    <rect x="174" y="84" width="94" height="10" rx="5" fill="#7dd3fc"/>
+    <rect x="174" y="102" width="72" height="10" rx="5" fill="#7dd3fc"/>
+    <text x="150" y="380" font-size="16" font-weight="700" fill="#0f172a" text-anchor="middle">Book (half open)</text>
+    <text x="150" y="402" font-size="13" fill="#64748b" text-anchor="middle">vertical fold from useFoldRegion()</text>
+    <text x="150" y="420" font-size="13" fill="#64748b" text-anchor="middle">panes either side, gap = fold width</text>
+  </g>
+
+  <!-- 4. Tabletop: half open, landscape, horizontal fold -> top/bottom -->
+  <g transform="translate(1030,180)">
+    <rect x="0" y="0" width="260" height="200" rx="22" fill="#0f172a"/>
+    <rect x="7" y="7" width="246" height="186" rx="16" fill="#ffffff"/>
+    <rect x="7" y="94" width="246" height="12" fill="#fde68a"/>
+    <line x1="7" y1="100" x2="253" y2="100" stroke="#d97706" stroke-width="2" stroke-dasharray="6 4"/>
+    <rect x="18" y="16" width="70" height="16" rx="8" fill="#0891b2"/>
+    <text x="53" y="28" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">TABLETOP</text>
+    <rect x="18" y="38" width="224" height="48" rx="9" fill="#ede9fe"/>
+    <text x="130" y="56" font-size="12" font-weight="600" fill="#4c1d95" text-anchor="middle">primary</text>
+    <rect x="30" y="66" width="180" height="9" rx="4.5" fill="#c4b5fd"/>
+    <rect x="18" y="114" width="224" height="68" rx="9" fill="#e0f2fe"/>
+    <text x="130" y="132" font-size="12" font-weight="600" fill="#075985" text-anchor="middle">secondary</text>
+    <rect x="30" y="142" width="180" height="9" rx="4.5" fill="#7dd3fc"/>
+    <rect x="30" y="158" width="130" height="9" rx="4.5" fill="#7dd3fc"/>
+    <text x="130" y="320" font-size="16" font-weight="700" fill="#0f172a" text-anchor="middle">Tabletop (half open)</text>
+    <text x="130" y="342" font-size="13" fill="#64748b" text-anchor="middle">horizontal fold, landscape</text>
+    <text x="130" y="360" font-size="13" fill="#64748b" text-anchor="middle">panes above / below the fold</text>
+  </g>
+
+  <g transform="translate(40,578)" font-size="13" fill="#475569">
+    <rect x="0" y="-11" width="14" height="14" rx="3" fill="#fde68a" stroke="#d97706"/>
+    <text x="22" y="0">fold / hinge region (kept free of content)</text>
+  </g>
+</svg>

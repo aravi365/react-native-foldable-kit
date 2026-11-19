@@ -9,6 +9,24 @@
 - **Safe everywhere.** On regular phones, tablets, web, older iOS or older Xcode you get inert defaults. It never throws.
 - New Architecture TurboModule (RN 0.79+). Works in bare React Native and in Expo dev builds.
 
+## Demo
+
+![How FoldableSplit lays out when closed, fully open, half open as a book, and in tabletop posture](https://raw.githubusercontent.com/aravi365/react-native-foldable-kit/main/docs/layouts.png)
+
+*Layout illustration.* Real simulator and emulator captures of the [demo app](./example/App.tsx) are in [docs/SCREENSHOTS.md](./docs/SCREENSHOTS.md).
+
+Run the demo yourself:
+
+```sh
+git clone https://github.com/aravi365/react-native-foldable-kit && cd react-native-foldable-kit
+scripts/create-example.sh                 # bare RN app in example/FoldableKitDemo
+(cd example/FoldableKitDemo && npx react-native run-ios)      # iPhone Duo simulator (Xcode 27.1)
+(cd example/FoldableKitDemo && npx react-native run-android)  # Pixel Fold / foldable emulator
+scripts/capture-screenshots.sh ios        # or android: saves each posture to docs/screenshots
+```
+
+The demo shows a live panel (posture, hinge angle, size class, fold frame, vertical bar edge, occlusions) above a list/detail `FoldableSplit`.
+
 ## Install
 
 ```sh
