@@ -24,6 +24,5 @@ jobs:
       - run: npm test
       - name: Check the release tag matches package.json
         run: test "v$(node -p 'require("./package.json").version')" = "${GITHUB_REF_NAME}"
-      - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Stage the release on npm (approve it on npmjs.com or with npm stage approve)
+        run: npm stage publish --provenance --access public
