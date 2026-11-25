@@ -17,7 +17,7 @@ export function useWindowRect(): MeasuredView & { rect: Rect } {
   const onLayout = useCallback((e: LayoutChangeEvent) => {
     const { width, height } = e.nativeEvent.layout;
     const node = ref.current;
-    if (!node) return setRect({ x: 0, y: 0, width, height });
+    if (typeof node?.measureInWindow !== 'function') return setRect({ x: 0, y: 0, width, height });
     node.measureInWindow((x, y, w, h) => {
       setRect((p) => (p.x === x && p.y === y && p.width === w && p.height === h ? p : { x, y, width: w, height: h }));
     });

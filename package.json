@@ -1,6 +1,6 @@
 {
   "name": "react-native-foldable-kit",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Make React Native apps iPhone Duo and Android foldable ready: fold & hinge posture, reserved regions (fold, cameras), size classes, vertical bar edge and a fold-aware split view. Tiny, zero dependencies, New Architecture.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -33,7 +33,9 @@
   "scripts": {
     "build": "rm -rf lib && tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
-    "test": "node --test --experimental-strip-types src/__tests__/*.test.ts",
+    "test:unit": "node --test --experimental-strip-types src/__tests__/*.test.ts",
+    "test:components": "jest",
+    "test": "npm run test:unit && npm run test:components",
     "prepack": "npm run build"
   },
   "keywords": [
@@ -54,7 +56,15 @@
     "size-class",
     "split-view",
     "turbo-module",
-    "new-architecture"
+    "new-architecture",
+    "expo",
+    "fold",
+    "foldable-phone",
+    "galaxy-fold",
+    "dual-screen-android",
+    "window-manager",
+    "hinge-angle",
+    "responsive-layout"
   ],
   "license": "MIT",
   "author": "Aravi (https://github.com/aravi365)",
@@ -69,9 +79,14 @@
     "react-native": ">=0.79.0"
   },
   "devDependencies": {
+    "@react-native/babel-preset": "^0.88.1",
+    "@react-native/jest-preset": "^0.88.1",
+    "@testing-library/react-native": "^14.1.0",
     "@types/react": "^19.2.0",
+    "jest": "^30.5.2",
     "react": "19.3.1",
     "react-native": "0.88.1",
+    "test-renderer": "^1.3.1",
     "typescript": "^5.9.0"
   },
   "codegenConfig": {
@@ -86,5 +101,11 @@
         "FoldableKit": "FoldableKit"
       }
     }
+  },
+  "engines": {
+    "node": ">=22.6"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

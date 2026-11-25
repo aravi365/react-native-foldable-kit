@@ -2,6 +2,13 @@
 
 ![react-native-foldable-kit: make your React Native app iPhone Duo and Android foldable ready](https://raw.githubusercontent.com/aravi365/react-native-foldable-kit/main/docs/cover.png)
 
+[![npm version](https://img.shields.io/npm/v/react-native-foldable-kit.svg)](https://www.npmjs.com/package/react-native-foldable-kit)
+[![npm downloads](https://img.shields.io/npm/dw/react-native-foldable-kit.svg)](https://www.npmjs.com/package/react-native-foldable-kit)
+[![CI](https://github.com/aravi365/react-native-foldable-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/aravi365/react-native-foldable-kit/actions/workflows/ci.yml)
+[![license: MIT](https://img.shields.io/npm/l/react-native-foldable-kit.svg)](./LICENSE)
+![platforms: iOS | Android](https://img.shields.io/badge/platforms-iOS%20%7C%20Android-blue.svg)
+![New Architecture](https://img.shields.io/badge/New%20Architecture-supported-brightgreen.svg)
+
 **Make your React Native app iPhone Duo and Android foldable ready.** Fold posture, hinge, fold and camera regions, size classes, the iPhone Duo vertical bar edge and a fold-aware split view, behind one tiny API.
 
 - One API for **iPhone Duo** (iOS 27.1 `UIHingeInteraction`, `reservedRegions`, `verticalBarEdge`) and **Android foldables** (Jetpack WindowManager `FoldingFeature`, hinge angle sensor, display cutouts): Galaxy Z Fold / Flip, Pixel Fold, OnePlus Open, Surface Duo and others.
@@ -180,9 +187,57 @@ setMockFoldableState();                       // reset to a regular phone
 
 Test every posture without booting a simulator.
 
+## Migrating from other packages
+
+Every hook here works without a provider and reads state that's ready on the first render. Angles are always degrees.
+
+### From expo-hinge
+
+| expo-hinge | react-native-foldable-kit |
+|---|---|
+| `useHinge()` → `Hinge \| null` | `useHinge({ angle: true })` → `{ status, angle }`. No device hinge gives `status: 'unknown'`, never `null`. |
+| `getHinge()` | `getFoldableState().hinge` |
+| `addHingeListener(e => e.hinge)` | `addFoldableListener(s => s.hinge)` |
+| `useAnimatedHinge()` (Reanimated) | No worklet API. Keep expo-hinge alongside for that one hook. |
+
+Android `status` is never `closed` in expo-hinge. Here a closed Android foldable reports `closed` (from the hinge sensor), and `usePosture()` returns `closed`.
+
+### From react-native-reserved-regions
+
+| react-native-reserved-regions | react-native-foldable-kit |
+|---|---|
+| `<ReservedRegionsProvider>` | Not needed. Use `<FoldAwareView>` or `useFoldLayout()` for the fold in a view's coordinates. |
+| `useReservedRegions()` | `useFoldable(s => s.regions)` (window coordinates), or `useFoldRegion()` / `useOcclusions()` for the active ones |
+| division `occludesContent` | `separating` |
+| `useReservedRegionsReady()` / `<ReservedRegionsGate>` | Not needed: state is available on the first render. |
+
+### From react-native-iphone-duo
+
+| react-native-iphone-duo | react-native-foldable-kit |
+|---|---|
+| `useIphoneDuo()` | `useFoldable()`: `hingeStatus` → `hinge.status`, `hingeAngle` → `hinge.angle`, `foldOrientation` → `fold?.orientation` |
+| `useVerticalBarSide()` | `useVerticalBarEdge()` |
+| `useFoldRegion()` | `useFoldRegion()` (adds `orientation`) |
+| `getState()` / `subscribe()` | `getFoldableState()` / `addFoldableListener()` |
+
+Plus Android foldables, `FoldableSplit`, `FoldableRoot` and Jest presets.
+
+### From react-native-hinge
+
+| react-native-hinge | react-native-foldable-kit |
+|---|---|
+| `useHingeAngle()` (radians by default) | `useHinge({ angle: true }).angle` in degrees. Multiply by `Math.PI / 180` for radians. |
+| `useHingeStatus()` | `useHinge().status` |
+
+No Nitro Modules or worklets dependency.
+
 ## Why another package?
 
 Earlier libraries each cover one slice: iOS-only Duo signals, hinge only (sometimes pulling in Nitro, worklets or Expo), or a provider-scoped regions view. This kit combines the parts you need to ship (posture, fold, occlusions, size class, bar edge, a ready-made split view) for **both** platforms, with no dependencies. See [NOTICE](./NOTICE) for credits.
+
+## Contributing
+
+Bug reports from real devices are especially welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md) and the [changelog](./CHANGELOG.md).
 
 ## License
 
