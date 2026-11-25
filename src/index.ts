@@ -1,8 +1,10 @@
 export * from './types';
 export { addFoldableListener, getFoldableState } from './store';
 export {
+  shallowEqual,
   useAvailableSize,
   useFoldable,
+  useFoldLayout,
   useFoldRegion,
   useHinge,
   useIsFoldable,
@@ -14,4 +16,5 @@ export {
 } from './hooks';
 export { FoldableSplit, type FoldableSplitProps } from './FoldableSplit';
 export { FoldableRoot, type FoldableRootProps } from './FoldableRoot';
-export { computeRootLayout, computeSplit, foldOrientation, sizeClassFromWindow, type RootLayout, type SplitLayout } from './core';
+export { FoldAwareView, type FoldAwareViewProps } from './FoldAwareView';
+export { computeRootLayout, computeSplit, foldInRect, foldOrientation, sizeClassFromWindow, type RootLayout, type SplitLayout } from './core';

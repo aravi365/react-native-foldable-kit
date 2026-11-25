@@ -99,9 +99,27 @@ Inside `FoldableRoot`, `useSizeClass()`, `useIsWide()` and `useAvailableSize()` 
 | `useHinge({ angle? })` | `{ status, angle }` | Effects driven by the hinge. Pass `{ angle: true }` for live degrees (0 closed, 180 flat). |
 | `useIsFoldable()` | `boolean` | Showing foldable-only features. |
 | `useAvailableSize()` | `{ width, height }` | Size to lay out in: the `FoldableRoot` pane while avoiding the fold, else the window. |
-| `useFoldable()` | full `FoldableState` | Everything at once (re-renders on any change). |
+| `useFoldLayout()` | `{ ref, onLayout, fold }` | The fold in **your view's** coordinates, null when it doesn't cross the view. |
+| `useFoldable(selector?, isEqual?)` | selected value | Any custom slice of state; re-renders only when that slice changes. |
 
 Outside React: `getFoldableState()` and `addFoldableListener(fn)`.
+
+Custom selections re-render only when what you select changes. Use `shallowEqual` when the selector builds an object:
+
+```tsx
+import { shallowEqual, useFoldable } from 'react-native-foldable-kit';
+
+const halfOpen = useFoldable((s) => s.hinge.status === 'partiallyOpen');
+const { posture, isFoldable } = useFoldable((s) => ({ posture: s.posture, isFoldable: s.isFoldable }), shallowEqual);
+```
+
+For a fold position relative to one of your own views (below a header, inside a card), use `FoldAwareView` or `useFoldLayout()`:
+
+```tsx
+<FoldAwareView style={{ flex: 1 }}>
+  {(fold) => (fold ? <Gallery gapAt={fold.frame} /> : <Gallery />)}
+</FoldAwareView>
+```
 
 ```tsx
 function Player() {
@@ -145,7 +163,8 @@ function Turntable() {
 Notes:
 - Android reports a fold only while your window spans it. On the outer display of a closed device posture is `closed` (from the hinge sensor) or `unknown`.
 - Dual-screen devices with a physical gap (Surface Duo) report `flat` *with* a separating fold, and `FoldableSplit` still splits around it.
-- Region frames are window coordinates in points/dp, comparable with `measureInWindow`. On Android this assumes the default edge-to-edge root view (RN 0.81+).
+- Region frames are window coordinates in points/dp, comparable with `measureInWindow`. On Android this assumes the default edge-to-edge root view (RN 0.81+). `useFoldLayout()` and `FoldAwareView` convert them to a view's own coordinates.
+- Multitasking is covered: size classes follow the app's window, so iPad Split View, Slide Over and Stage Manager, and Android split-screen and freeform windows, all get the right compact/regular values.
 
 ## Jest
 
@@ -153,8 +172,13 @@ Notes:
 jest.mock('react-native-foldable-kit', () => require('react-native-foldable-kit/jest'));
 
 import { setMockFoldableState } from 'react-native-foldable-kit/jest';
-setMockFoldableState({ posture: 'tabletop', isFoldable: true });
+
+setMockFoldableState('book');                 // presets: 'phone' | 'closed' | 'flat' | 'book' | 'tabletop'
+setMockFoldableState({ verticalBarEdge: 'left' }); // or merge in any part of the state
+setMockFoldableState();                       // reset to a regular phone
 ```
+
+Test every posture without booting a simulator.
 
 ## Why another package?
 

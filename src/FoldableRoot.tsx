@@ -1,9 +1,9 @@
-import { useCallback, useMemo, useRef, useState, type ComponentRef, type ReactNode } from 'react';
-import { StyleSheet, View, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
+import { useMemo, type ReactNode } from 'react';
+import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { computeRootLayout } from './core';
 import { useFoldRegion } from './hooks';
+import { useWindowRect } from './useWindowRect';
 import { PaneSizeContext } from './paneContext';
-import type { Rect } from './types';
 
 export type FoldableRootProps = {
   children: ReactNode;
@@ -21,20 +21,8 @@ export type FoldableRootProps = {
  * of the crease. Children stay mounted when the layout changes. Inside, useSizeClass/useIsWide reflect the pane.
  */
 export function FoldableRoot({ children, avoidFold = true, side = 'larger', other, style }: FoldableRootProps) {
-  const ref = useRef<ComponentRef<typeof View>>(null);
   const fold = useFoldRegion();
-  const [rect, setRect] = useState<Rect>({ x: 0, y: 0, width: 0, height: 0 });
-
-  const onLayout = useCallback((e: LayoutChangeEvent) => {
-    const { width, height } = e.nativeEvent.layout;
-    const node = ref.current;
-    if (!node) return setRect({ x: 0, y: 0, width, height });
-    node.measureInWindow((x, y, w, h) => {
-      setRect((p) =>
-        p.x === x && p.y === y && p.width === w && p.height === h ? p : { x, y, width: w, height: h }
-      );
-    });
-  }, []);
+  const { ref, onLayout, rect } = useWindowRect();
 
   const layout = avoidFold ? computeRootLayout(rect, fold, side) : ({ avoid: false } as const);
   const row = layout.avoid && layout.direction === 'row';

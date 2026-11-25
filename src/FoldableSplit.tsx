@@ -1,8 +1,8 @@
-import { useCallback, useRef, useState, type ComponentRef, type ReactNode } from 'react';
-import { StyleSheet, View, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
+import type { ReactNode } from 'react';
+import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { computeSplit } from './core';
 import { useFoldRegion } from './hooks';
-import type { Rect } from './types';
+import { useWindowRect } from './useWindowRect';
 
 export type FoldableSplitProps = {
   primary: ReactNode;
@@ -34,20 +34,8 @@ export function FoldableSplit({
   style,
   paneStyle,
 }: FoldableSplitProps) {
-  const ref = useRef<ComponentRef<typeof View>>(null);
   const fold = useFoldRegion();
-  const [rect, setRect] = useState<Rect>({ x: 0, y: 0, width: 0, height: 0 });
-
-  const onLayout = useCallback((e: LayoutChangeEvent) => {
-    const { width, height } = e.nativeEvent.layout;
-    const node = ref.current;
-    if (!node) return setRect({ x: 0, y: 0, width, height });
-    node.measureInWindow((x, y, w, h) => {
-      setRect((p) =>
-        p.x === x && p.y === y && p.width === w && p.height === h ? p : { x, y, width: w, height: h }
-      );
-    });
-  }, []);
+  const { ref, onLayout, rect } = useWindowRect();
 
   const layout = computeSplit(rect, fold, { ratio, minPaneSize, splitMinWidth });
 

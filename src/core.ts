@@ -196,3 +196,16 @@ export function computeRootLayout(
     gap,
   };
 }
+
+/** The fold's frame relative to a container, or null when it does not cross the container. */
+export function foldInRect(container: Rect, fold: FoldRegion | null): FoldRegion | null {
+  if (!fold || container.width <= 0 || container.height <= 0) return null;
+  const x0 = Math.max(fold.frame.x, container.x);
+  const y0 = Math.max(fold.frame.y, container.y);
+  const x1 = Math.min(fold.frame.x + fold.frame.width, container.x + container.width);
+  const y1 = Math.min(fold.frame.y + fold.frame.height, container.y + container.height);
+  const vertical = fold.orientation === 'vertical';
+  if (vertical ? x0 > x1 || y0 >= y1 : y0 > y1 || x0 >= x1) return null;
+  if (vertical ? x0 <= container.x || x1 >= container.x + container.width : y0 <= container.y || y1 >= container.y + container.height) return null;
+  return { ...fold, frame: { x: x0 - container.x, y: y0 - container.y, width: x1 - x0, height: y1 - y0 } };
+}
