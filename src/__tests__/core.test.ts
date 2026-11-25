@@ -1,4 +1,5 @@
 import { test } from 'node:test';
+import { webState } from '../web.ts';
 import assert from 'node:assert/strict';
 import { computeRootLayout, computeSplit, foldInRect, DEFAULT_STATE, normalize, sizeClassFromWindow } from '../core.ts';
 
@@ -131,4 +132,32 @@ test('fold relative to a view', () => {
   const zero = normalize({ ...base, hingeStatus: 'partiallyOpen', regions: [{ ...hFold, height: 0 }] }).fold;
   assert.deepEqual(foldInRect({ x: 0, y: 300, width: 700, height: 300 }, zero)?.frame, { x: 0, y: 100, width: 700, height: 0 });
   assert.equal(foldInRect({ x: 0, y: 0, width: 700, height: 800 }, null), null);
+});
+
+test('web: one segment is not a fold', () => {
+  const s = webState({ segments: [{ x: 0, y: 0, width: 800, height: 600 }], posture: 'continuous', sawFold: false });
+  assert.equal(s.isSupported, true);
+  assert.equal(s.isFoldable, false);
+  assert.equal(normalize(s).posture, 'unknown');
+});
+
+test('web: folded with side-by-side segments is book', () => {
+  const s = webState({ segments: [{ x: 420, y: 0, width: 400, height: 900 }, { x: 0, y: 0, width: 400, height: 900 }], posture: 'folded', sawFold: false });
+  const n = normalize(s);
+  assert.equal(n.posture, 'book');
+  assert.deepEqual(n.fold?.frame, { x: 400, y: 0, width: 20, height: 900 });
+});
+
+test('web: folded with stacked segments is tabletop; flat dual screen keeps the fold', () => {
+  const stacked = [{ x: 0, y: 0, width: 900, height: 400 }, { x: 0, y: 400, width: 900, height: 400 }];
+  assert.equal(normalize(webState({ segments: stacked, posture: 'folded', sawFold: false })).posture, 'tabletop');
+  const flat = normalize(webState({ segments: stacked, posture: 'continuous', sawFold: false }));
+  assert.equal(flat.posture, 'flat');
+  assert.deepEqual(flat.fold?.frame, { x: 0, y: 400, width: 900, height: 0 });
+});
+
+test('web: no APIs means unsupported defaults', () => {
+  const s = webState({ segments: null, posture: null, sawFold: false });
+  assert.equal(s.isSupported, false);
+  assert.equal(normalize(s).posture, 'unknown');
 });

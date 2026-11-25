@@ -6,16 +6,18 @@
 [![npm downloads](https://img.shields.io/npm/dw/react-native-foldable-kit.svg)](https://www.npmjs.com/package/react-native-foldable-kit)
 [![CI](https://github.com/aravi365/react-native-foldable-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/aravi365/react-native-foldable-kit/actions/workflows/ci.yml)
 [![license: MIT](https://img.shields.io/npm/l/react-native-foldable-kit.svg)](./LICENSE)
-![platforms: iOS | Android](https://img.shields.io/badge/platforms-iOS%20%7C%20Android-blue.svg)
+![platforms: iOS | Android | Web](https://img.shields.io/badge/platforms-iOS%20%7C%20Android%20%7C%20Web-blue.svg)
 ![New Architecture](https://img.shields.io/badge/New%20Architecture-supported-brightgreen.svg)
+![JS size: under 7 KB gzipped](https://img.shields.io/badge/JS%20size-%3C%207%20KB%20gzipped-brightgreen.svg)
+![dependencies: 0](https://img.shields.io/badge/dependencies-0-brightgreen.svg)
 
 **Make your React Native app iPhone Duo and Android foldable ready.** Fold posture, hinge, fold and camera regions, size classes, the iPhone Duo vertical bar edge and a fold-aware split view, behind one tiny API.
 
-- One API for **iPhone Duo** (iOS 27.1 `UIHingeInteraction`, `reservedRegions`, `verticalBarEdge`) and **Android foldables** (Jetpack WindowManager `FoldingFeature`, hinge angle sensor, display cutouts): Galaxy Z Fold / Flip, Pixel Fold, OnePlus Open, Surface Duo and others.
-- **Zero runtime dependencies.** No Expo, Nitro, Reanimated or worklets needed. ~4 KB of JS gzipped.
+- One API for **iPhone Duo** (iOS 27.1 `UIHingeInteraction`, `reservedRegions`, `verticalBarEdge`) and **Android foldables** (Jetpack WindowManager `FoldingFeature`, hinge angle sensor, display cutouts): Galaxy Z Fold / Flip, Pixel Fold, OnePlus Open, Surface Duo and others. **On the web** (React Native Web, Expo web) it uses the browser's Viewport Segments and Device Posture APIs.
+- **Zero runtime dependencies.** No Expo, Nitro, Reanimated or worklets needed. Under 7 KB of JS gzipped, everything included (checked in CI).
 - **No provider.** Hooks read a shared store and re-render only when *their* value changes.
 - **Cheap by default.** The continuous hinge angle stays off until a component asks for it.
-- **Safe everywhere.** On regular phones, tablets, web, older iOS or older Xcode you get inert defaults. It never throws.
+- **Safe everywhere.** On regular phones, tablets, unsupported browsers, older iOS or older Xcode you get inert defaults. It never throws.
 - New Architecture TurboModule (RN 0.79+). Works in bare React Native and in Expo dev builds.
 
 ## Demo
@@ -158,16 +160,17 @@ function Turntable() {
 
 ## Platform behaviour
 
-| | iPhone Duo (iOS 27.1+) | Android foldables | Other devices |
-|---|---|---|---|
-| Hinge status | `UIHinge.status` | `FoldingFeature.state`, plus angle sensor for `closed` | `unknown` |
-| Hinge angle | `UIHinge.angle` | `TYPE_HINGE_ANGLE` sensor (Android 11+) | `null` |
-| Fold region | `reservedRegions(.division)` | `FoldingFeature.bounds` (separating) | none |
-| Occlusions | `reservedRegions(.occlusion)` | display cutouts | cutouts on Android, none on iOS < 27.1 |
-| Vertical bar edge | `traitCollection.verticalBarEdge` | `null` | `null` |
-| Size class | native traits | from window size (600dp / 480dp) | native on iOS, window size elsewhere |
+| | iPhone Duo (iOS 27.1+) | Android foldables | Web (Chrome / Edge 138+) | Other devices |
+|---|---|---|---|---|
+| Hinge status | `UIHinge.status` | `FoldingFeature.state`, plus angle sensor for `closed` | `navigator.devicePosture` (`folded` → partially open) | `unknown` |
+| Hinge angle | `UIHinge.angle` | `TYPE_HINGE_ANGLE` sensor (Android 11+) | `null` (browsers don't expose it) | `null` |
+| Fold region | `reservedRegions(.division)` | `FoldingFeature.bounds` (separating) | the gap between `window.viewport.segments` | none |
+| Occlusions | `reservedRegions(.occlusion)` | display cutouts | none | cutouts on Android, none on iOS < 27.1 |
+| Vertical bar edge | `traitCollection.verticalBarEdge` | `null` | `null` | `null` |
+| Size class | native traits | from window size (600dp / 480dp) | from window size | native on iOS, window size elsewhere |
 
 Notes:
+- Web support covers Chrome and Edge 138+ on foldables and dual-screen devices. Other browsers get the same safe defaults as a regular phone.
 - Android reports a fold only while your window spans it. On the outer display of a closed device posture is `closed` (from the hinge sensor) or `unknown`.
 - Dual-screen devices with a physical gap (Surface Duo) report `flat` *with* a separating fold, and `FoldableSplit` still splits around it.
 - Region frames are window coordinates in points/dp, comparable with `measureInWindow`. On Android this assumes the default edge-to-edge root view (RN 0.81+). `useFoldLayout()` and `FoldAwareView` convert them to a view's own coordinates.

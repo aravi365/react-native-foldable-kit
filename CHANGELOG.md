@@ -2,6 +2,12 @@
 
 All notable changes to this project. Versions follow [semver](https://semver.org).
 
+## 0.4.0
+
+- Added web support (React Native Web, Expo web) through the Viewport Segments and Device Posture APIs, Chrome and Edge 138+: fold region, posture and foldable detection in the browser.
+- CI now fails if the published JavaScript grows past 7 KB gzipped.
+- Added Dependabot for dev dependencies and GitHub Actions.
+
 ## 0.3.1
 
 - Fixed: view measuring falls back to layout values where `measureInWindow` is not available (tests, web).

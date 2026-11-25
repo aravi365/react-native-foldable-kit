@@ -1,5 +1,5 @@
 import type { EventSubscription } from 'react-native';
-import native from './NativeFoldableKit';
+import native from './foldableModule';
 import type { NativeFoldableState } from './NativeFoldableKit';
 import { DEFAULT_STATE, normalize } from './core';
 import type { FoldableState } from './types';
